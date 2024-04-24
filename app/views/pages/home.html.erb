@@ -1,2 +1,7 @@
 <h1>Pages#home</h1>
 <p>Find me in app/views/pages/home.html.erb</p>
+
+  <% @books.each do |book| %>
+    <h2><%= book.title %></h2>
+    <p><%= book.cover_url %></p>
+  <% end %>
