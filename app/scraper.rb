@@ -2,39 +2,71 @@ require 'nokogiri'
 require 'open-uri'
 require_relative '../config/environment'
 
+# Méthode pour récupérer les informations de chaque livre sur une page
+def scrape_page(url)
+  puts "Scraping page #{url}..."
+  html = URI.open(url)
+  doc = Nokogiri::HTML(html)
 
-# URL de la page Goodreads pour les livres d'Agatha Christie
-url = 'https://www.goodreads.com/author/list/123715.Agatha_Christie'
+  books = []
 
-# Parsing de la page HTML
-html = URI.open(url)
-doc = Nokogiri::HTML(html)
+  # Récupération des titres, des dates et des images des couvertures
+  doc.css('[data-testid="product-title"]').each_with_index do |title_node, index|
+    title = title_node.text.strip
+    year = doc.css('[data-testid="date-release"]')[index].text.strip
+    cover_url = doc.css('[data-testid="poster-img"]')[index]['src']
 
-# Récupération des titres et des URLs des couvertures des livres
-books = []
-doc.css('.bookTitle').each do |book_title|
-  title = book_title.text.strip
-  cover_url = book_title.parent.parent.css('.bookCover').css('img').attribute('src').value
-  image_data = URI.open(cover_url).read
-
-  # Crée un fichier pour l'image localement
-  file_path = "app/assets/images/covers/#{title.parameterize}.jpg"
-  File.binwrite(file_path, 'wb') do |file|
-    file.write(image_data)
+    books << { title: title, year: year, cover_url: cover_url }
   end
-  books << { title: title, cover_url: cover_url }
+
+  books
 end
 
-# Enregistrement dans la BD
-books.each do |book_data|
-  Book.create(title: book_data[:title], cover_path: "covers/#{book_data[:title].parameterize}.jpg")
+# Méthode pour scraper toutes les pages et rassembler les informations
+def scrape_all_pages(base_url, total_pages)
+  all_books = []
+
+  total_pages.times do |page_number|
+    page_url = "#{base_url}?page=#{page_number + 1}"
+    all_books += scrape_page(page_url)
+  end
+
+  all_books
 end
 
+# URL de la première page
+base_url = 'https://www.senscritique.com/liste/agatha_christie_par_ordre_chronologique/2971899'
 
+# Nombre total de pages
+total_pages = 3
 
-# Affichage des résultats
-books.each do |book|
+# Scraper toutes les pages
+all_books = scrape_all_pages(base_url, total_pages)
+
+# Afficher les résultats
+all_books.each do |book|
   puts "Titre : #{book[:title]}"
+  puts "Date de sortie : #{book[:year]}"
   puts "URL de la couverture : #{book[:cover_url]}"
   puts "-----------------------------"
 end
+
+# Créer les livres dans la base de données
+def create_books(book_data)
+  book_data.each do |book|
+    new_book = Book.new(
+      title: book[:title],
+      year: book[:year],
+      cover_url: book[:cover_url]
+    )
+
+    if new_book.save
+      puts "Livre sauvegardé : #{new_book.title}"
+    else
+      puts "Erreur lors de la sauvegarde du livre : #{new_book.errors.full_messages.join(', ')}"
+    end
+  end
+end
+
+# Sauvegarder les livres dans la base de données
+create_books(all_books)

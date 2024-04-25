@@ -3,7 +3,8 @@ class BooksController < ApplicationController
 
   # GET /books or /books.json
   def index
-    @books = Book.all
+    @books = Book.all.order(:title)
+    @books = filter_books(params[:character]) if params[:character].present?
   end
 
   # GET /books/1 or /books/1.json
@@ -66,5 +67,17 @@ class BooksController < ApplicationController
     # Only allow a list of trusted parameters through.
     def book_params
       params.require(:book).permit(:title, :year, :read, :cover_path)
+    end
+
+    def filter_books(character)
+      case character
+      when "Hercule Poirot"
+        Book.where("title LIKE ?", "%Hercule Poirot%").order(:title)
+      when "Miss Marple"
+        Book.where("title LIKE ?", "%Miss Marple%").order(:title)
+      # Ajoutez d'autres filtres ici pour d'autres personnages
+      else
+        Book.none
+      end
     end
 end

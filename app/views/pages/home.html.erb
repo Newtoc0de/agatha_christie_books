@@ -1,7 +1,17 @@
-<h1>Pages#home</h1>
-<p>Find me in app/views/pages/home.html.erb</p>
+<div class="container">
+  <%= form_tag(books_path, method: :get) do %>
+    <%= select_tag(:character, options_for_select(["Hercule Poirot", "Miss Marple"])) %>
+    <%= submit_tag("Filtrer") %>
+  <% end %>
 
   <% @books.each do |book| %>
-    <h2><%= book.title %></h2>
-      <%= image_tag "covers/#{book.cover_url}" %>
+    <div>
+      <h2><%= book.title %></h2>
+      <% if book.cover_url.present? %>
+        <%= image_tag book.cover_url %>
+      <% else %>
+        <p>Aucune couverture disponible</p>
+      <% end %>
+    </div>
   <% end %>
+</div>
