@@ -3,5 +3,5 @@
 
   <% @books.each do |book| %>
     <h2><%= book.title %></h2>
-      <img src="<%= book.cover_path %>">
+      <%= image_tag "covers/#{book.cover_url}" %>
   <% end %>
