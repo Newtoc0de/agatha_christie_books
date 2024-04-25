@@ -15,13 +15,21 @@ books = []
 doc.css('.bookTitle').each do |book_title|
   title = book_title.text.strip
   cover_url = book_title.parent.parent.css('.bookCover').css('img').attribute('src').value
+  image_data = URI.open(cover_url).read
+
+  # Crée un fichier pour l'image localement
+  file_path = "app/assets/images/covers/#{title.parameterize}.jpg"
+  File.binwrite(file_path, 'wb') do |file|
+    file.write(image_data)
+  end
   books << { title: title, cover_url: cover_url }
 end
 
-#Enregistrement dans la BD
+# Enregistrement dans la BD
 books.each do |book_data|
-  Book.create(title: book_data[:title], cover_url: book_data[:cover_url])
+  Book.create(title: book_data[:title], cover_path: "covers/#{book_data[:title].parameterize}.jpg")
 end
+
 
 
 # Affichage des résultats
