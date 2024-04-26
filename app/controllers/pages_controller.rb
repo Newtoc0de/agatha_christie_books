@@ -1,5 +1,6 @@
 class PagesController < ApplicationController
   skip_before_action :authenticate_user!, only: [ :home ]
+  include BookHelper
 
   def home
     @books = Book.all.order(:title)
