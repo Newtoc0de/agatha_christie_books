@@ -4,14 +4,19 @@
     <%= submit_tag("Filtrer") %>
   <% end %>
 
-  <% @books.each do |book| %>
-    <div>
-      <h2><%= book.title %></h2>
-      <% if book.cover_url.present? %>
-        <%= image_tag book.cover_url %>
-      <% else %>
-        <p>Aucune couverture disponible</p>
-      <% end %>
-    </div>
-  <% end %>
-</div>
+ <div class="grid-container">
+        <% @books.each_slice(4) do |row| %>
+            <div class="grid-row">
+                <% row.each do |book| %>
+                    <div class="grid-item">
+                        <% if book.cover_url.present? %>
+                            <%= image_tag book.cover_url, class: "book-cover" %>
+                        <% else %>
+                            <p class="book-title"><%= book.title %></p>
+                        <% end %>
+                    </div>
+                <% end %> <!-- row.each -->
+            </div>
+        <% end %> <!-- @books.each_slice -->
+    </div> <!-- grid-container -->
+</div> <!-- container -->
