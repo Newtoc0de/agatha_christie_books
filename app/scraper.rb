@@ -1,5 +1,6 @@
 require 'nokogiri'
 require 'open-uri'
+require 'base64' # Ajout de la bibliothèque base64
 require_relative '../config/environment'
 
 # Méthode pour récupérer les informations de chaque livre sur une page
@@ -14,12 +15,30 @@ def scrape_page(url)
   doc.css('[data-testid="product-title"]').each_with_index do |title_node, index|
     title = title_node.text.strip
     year = doc.css('[data-testid="date-release"]')[index].text.strip
-    cover_url = doc.css('[data-testid="poster-img"]')[index]['src']
+    cover_src = doc.css('[data-testid="poster-img"]')[index]['src']
+
+    # Vérifier si l'URL de la couverture est une URL valide ou une URL encodée en base64
+    if valid_image_url?(cover_src)
+      cover_url = cover_src
+    else
+      # Décode l'URL encodée en base64
+      decoded_cover_data = Base64.decode64(cover_src.split(',')[1])
+      # Crée une URL temporaire pour l'image encodée en base64
+      temp_cover_file = Tempfile.new(['cover', '.jpg'])
+      temp_cover_file.binmode
+      temp_cover_file.write(decoded_cover_data)
+      cover_url = temp_cover_file.path
+    end
 
     books << { title: title, year: year, cover_url: cover_url }
   end
 
   books
+end
+
+# Méthode pour vérifier si une URL est une URL d'image valide
+def valid_image_url?(url)
+  url.start_with?('http', 'https') && url.include?('.')
 end
 
 # Méthode pour scraper toutes les pages et rassembler les informations

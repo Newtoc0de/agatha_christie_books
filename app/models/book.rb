@@ -1,4 +1,4 @@
 class Book < ApplicationRecord
 
-  attribute :cover_path
+  attribute :cover_url
 end

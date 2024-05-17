@@ -3,7 +3,7 @@ class PagesController < ApplicationController
   include BookHelper
 
   def home
-    @books = Book.all.order(:title)
+    @books = Book.order(:id)
     @books = filter_books(params[:character]) if params[:character].present?
   end
 

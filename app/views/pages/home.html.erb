@@ -1,19 +1,14 @@
-<div class="container">
-  <%= form_tag(books_path, method: :get) do %>
-    <%= select_tag(:character, options_for_select(["Hercule Poirot", "Miss Marple"])) %>
-    <%= submit_tag("Filtrer") %>
-  <% end %>
 
- <div class="grid-container">
+<div class="container">
+    <div class="grid-container">
         <% @books.each_slice(4) do |row| %>
             <div class="grid-row">
                 <% row.each do |book| %>
                     <div class="grid-item">
-                        <% if book.cover_url.present? && cover_valid?(book.cover_url) %>
-                            <%= image_tag book.cover_url, class: "book-cover" %>
-                        <% else %>
-                            <p class="book-title"><%= book.title %></p>
-                        <% end %>
+                      <%= content_tag :p, book.title, class: "book-title" %>
+                            <% if book.cover_url.present?  %>
+                                <%= image_tag book.cover_url, class: "book-cover" %>
+                            <% end %>
                     </div>
                 <% end %> <!-- row.each -->
             </div>

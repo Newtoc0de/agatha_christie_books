@@ -11,19 +11,23 @@
 .grid-item {
   flex: 1;
   max-width: calc(25% - 20px); /* 20px pour la marge entre les éléments */
-  margin: 10px; /* Espacement entre les éléments */
-  border: 1px solid #ccc; /* Optionnel : ajoute une bordure pour les éléments */
-  padding: 10px; /* Optionnel : ajoute un espace à l'intérieur des éléments */
+  margin: 5px; /* Espacement entre les éléments */
+  padding: 5px; /* Optionnel : ajoute un espace à l'intérieur des éléments */
+}
+
+.book-title {
+  white-space: wrap;
+  font-weight: bold;
+  max-width: 200px;
+  font-size: 18px;
+  margin-top: 10px;
+  color: black;
 }
 
 .book-cover {
-  max-width: 200px; /* Ajustez la largeur maximale selon vos préférences */
-  height: auto; /* Pour maintenir le ratio de l'image */
-}
-
-/* Style pour les titres de livre */
-.book-title {
-  font-size: 16px; /* Taille de police pour les titres */
-  font-weight: bold; /* Poids de police en gras */
-  margin-top: 10px; /* Espacement supérieur pour les titres */
+  margin-top: 4px;
+  width: 100%;
+  max-height: 200px; /* Hauteur maximale pour toutes les couvertures */
+  object-fit: contain; /* L'image est ajustée pour tenir dans la boîte tout en conservant son ratio */
+  border-radius: 4%;
 }
