@@ -7,7 +7,7 @@
     <% @books.each do |book| %>
       <%= render book %>
       <p>
-        <%= link_to "Show this book", book %>
+        <%= link_to "Show this book", book, class: 'btn btn-gradient rounded-pill' %>
       </p>
     <% end %>
   </div>
