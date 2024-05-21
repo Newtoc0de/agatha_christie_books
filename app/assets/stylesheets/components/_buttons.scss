@@ -13,3 +13,8 @@
 .btn-gradient:hover {
   background: linear-gradient(45deg, #6600ff, #ff0066);
 }
+
+.btn {
+  display: inline-flex;
+  padding-bottom: 5;
+}

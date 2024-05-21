@@ -4,9 +4,7 @@
   <%= render @book %>
 
   <div>
-    <%= link_to "Edit this book", edit_book_path(@book) %> |
-    <%= link_to "Back to books", books_path %>
-
-    <%= button_to "Destroy this book", @book, method: :delete %>
+    <%= link_to "Edit this book", edit_book_path(@book), class: "btn btn-success rounded-pill" %> |
+    <%= link_to "Back to books", books_path, class: "btn btn-warning rounded-pill" %>
   </div>
 </div>
