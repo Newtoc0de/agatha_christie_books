@@ -1,17 +1,20 @@
-
-<div class="container">
-    <div class="grid-container">
-        <% @books.each_slice(4) do |row| %>
-            <div class="grid-row">
-                <% row.each do |book| %>
-                    <div class="grid-item">
-                      <%= content_tag :p, book.title, class: "book-title" %>
-                            <% if book.cover_url.present?  %>
-                                <%= image_tag book.cover_url, class: "book-cover" %>
-                            <% end %>
-                    </div>
-                <% end %> <!-- row.each -->
+<div class="container" data-controller="read-checkbox">
+  <div class="grid-container">
+    <% @books.each_slice(4) do |row| %>
+      <div class="grid-row">
+        <% row.each do |book| %>
+          <div class="grid-item">
+            <%= content_tag :p, book.title, class: "book-title" %>
+            <% if book.cover_url.present? %>
+              <%= image_tag book.cover_url, class: "book-cover" %>
+            <% end %>
+            <div class="field">
+              <%= label_tag "read_#{book.id}", "Read" %>
+              <%= check_box_tag "read_#{book.id}", 1, book.read, data: { url: book_path(book), target: "read-checkbox.checkbox" }, class: "read-checkbox" %>
             </div>
-        <% end %> <!-- @books.each_slice -->
-    </div> <!-- grid-container -->
+          </div>
+        <% end %> <!-- row.each -->
+      </div>
+    <% end %> <!-- @books.each_slice -->
+  </div> <!-- grid-container -->
 </div> <!-- container -->
