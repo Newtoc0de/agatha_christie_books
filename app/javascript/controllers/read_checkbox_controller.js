@@ -2,11 +2,15 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["checkbox"]
+  static targets = ["checkbox", "label"]
 
   connect() {
     this.checkboxTargets.forEach(checkbox => {
       checkbox.addEventListener('change', this.updateReadStatus.bind(this))
+    })
+    // Initial label text setup
+    this.checkboxTargets.forEach(checkbox => {
+      this.updateLabelText(checkbox)
     })
   }
 
@@ -29,8 +33,19 @@ export default class extends Controller {
         throw new Error('Network response was not ok')
       }
       return response.json()
+    }).then(data => {
+      this.updateLabelText(checkbox)
     }).catch(error => {
       console.error('There was a problem with the fetch operation:', error)
     })
+  }
+
+  updateLabelText(checkbox) {
+    const label = checkbox.nextElementSibling
+    if (checkbox.checked) {
+      label.textContent = "Lu"
+    } else {
+      label.textContent = "À lire"
+    }
   }
 }
