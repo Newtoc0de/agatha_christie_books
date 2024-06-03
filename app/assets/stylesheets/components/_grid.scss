@@ -13,6 +13,10 @@
   max-width: calc(25% - 20px); /* 20px pour la marge entre les éléments */
   margin: 5px; /* Espacement entre les éléments */
   padding: 5px; /* Optionnel : ajoute un espace à l'intérieur des éléments */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centre le contenu horizontalement */
+  justify-content: flex-start; /* Aligne le contenu en haut */
 }
 
 .book-title {
@@ -22,6 +26,10 @@
   font-size: 18px;
   margin-top: 10px;
   color: black;
+  height: 40px; /* Hauteur fixe pour les titres */
+  display: flex;
+  align-items: center; /* Centre le texte verticalement */
+  text-align: center; /* Centre le texte horizontalement */
 }
 
 .book-cover {

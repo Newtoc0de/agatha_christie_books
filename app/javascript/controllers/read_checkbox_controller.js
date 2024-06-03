@@ -6,7 +6,7 @@ export default class extends Controller {
 
   connect() {
     this.checkboxTargets.forEach(checkbox => {
-      checkbox.addEventListener('change', this.updateReadStatus.bind(this))
+      checkbox.addEventListener('change', this.handleCheckboxChange.bind(this))
     })
     // Initial label text setup
     this.checkboxTargets.forEach(checkbox => {
@@ -14,8 +14,13 @@ export default class extends Controller {
     })
   }
 
-  updateReadStatus(event) {
+  handleCheckboxChange(event) {
     const checkbox = event.target
+    this.updateReadStatus(checkbox)
+    this.updateLabelText(checkbox)
+  }
+
+  updateReadStatus(checkbox) {
     const readStatus = checkbox.checked
     const url = checkbox.dataset.url
 
@@ -33,8 +38,6 @@ export default class extends Controller {
         throw new Error('Network response was not ok')
       }
       return response.json()
-    }).then(data => {
-      this.updateLabelText(checkbox)
     }).catch(error => {
       console.error('There was a problem with the fetch operation:', error)
     })
